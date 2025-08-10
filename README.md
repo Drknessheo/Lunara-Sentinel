@@ -1,184 +1,90 @@
-<<<<<<< HEAD
-# Lunara-Sentinel
-=======
-=======
-<<<<<<< HEAD
->>>>>>> 95e250e (Save all local changes before merge)
-Great! Here's a **professional `README.md`** for your `lunara-bot` — designed for clarity, community use, and potential future monetization or scaling.
+# Lunara Bot – Modular AI-Powered Crypto Trading Assistant
+
+Lunara Bot is a secure, modular, and intelligent crypto trading assistant for Binance Spot markets, powered by Python and Telegram Bot API. It features robust admin controls, subscription management, encrypted API key storage, and multi-AI support (Gemini, Mistral).
 
 ---
 
-````markdown
-# 🌌 Lunara Bot
-
-**Lunara Bot** is a modular, intelligent crypto trading assistant powered by Telegram Bot API and Python. Designed for real-time signal alerts, trade tracking, and strategy guidance — Lunara is your trusted sidekick on the path to growing $10 into $1000 through disciplined swing trading.
+## 🚀 Key Features
+- **Telegram Bot Interface:** Trade insights, admin commands, and user management
+- **Encrypted API Key Storage:** Securely store user API keys using Fernet encryption
+- **Admin & Subscription Management:** Activate users, manage tiers, and control access
+- **Multi-AI Integration:** Gemini and Mistral AI for trade supervision and signals
+- **Automated Trading:** Rule-driven signals, risk controls, and real-time execution
+- **SQLite Database:** Local, reliable user and trade management
+- **Error Handling:** Robust error and exception management for reliability
 
 ---
 
-## 🚀 Features
-
-- 📲 **Telegram Bot Interface** — Trade insights delivered to your chat
-- 💹 **Crypto Trade Tracking** — Keep records of entry, exit, PnL
-- 🧠 **Strategy Logic** — Includes RSI, signal mirroring, and gain planning
-- 🗃️ **SQLite Database** — Lightweight local trade history management
-- 🛎️ **Telegram Signal Scanner** — (Planned) Real-time signal scraping
-- 🧭 **Spiritual Gamification Layer** *(optional)* — Track gains as "Resonance" points
+## 🛡️ Security & Setup
+- All sensitive keys are encrypted and never exposed in logs
+- Admin commands (`/activate`, `/setapi`) for secure user management
+- Store your bot token, API keys, and secrets in `.env` or environment variables
+- Only admins can activate premium features and manage subscriptions
 
 ---
 
 ## 🛠️ Installation
-
-> 📱 Best used on **Android (via Termux)** or **Linux systems**
-
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/Drknessheo/lunara-bot.git
-cd lunara-bot
-````
-
-### 2. Setup virtual environment
-
-```bash
-pkg install python git
-pip install virtualenv
-virtualenv venv
-source venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Add your bot token
-
-Edit `main.py` and replace:
-
-```python
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-```
-
-Or store it as an environment variable for safety.
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/Drknessheo/lunara-bot.git
+   cd lunara-bot
+   ```
+2. Setup virtual environment:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate  # On Windows
+   source venv/bin/activate  # On Linux/Mac
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Add your credentials to `.env` or `config.py`:
+   - `BOT_TOKEN`, `BINANCE_API_KEY`, `BINANCE_SECRET_KEY`, `ADMIN_USER_ID`, `TELEGRAM_CREATOR_ID`, `BINANCE_ENCRYPTION_KEY`, etc.
 
 ---
 
 ## 🧪 Running the Bot
-
 ```bash
 python main.py
 ```
 
-The bot will log startup in the console and begin listening for messages.
-
 ---
 
 ## 📂 Folder Structure
-
 ```
 lunara-bot/
 ├── main.py               # Entry point for the bot
-├── db.py                 # SQLite DB setup & interaction
-├── strategy.py           # Core trading logic
-├── scheduler.py          # Task scheduler
-├── utils.py              # Helper functions
+├── modules/              # Core modules (db_access, slip_manager, etc.)
+├── config.py             # Configuration and environment variables
 ├── requirements.txt      # Python dependencies
 └── README.md             # Project documentation
 ```
 
 ---
 
+## 📖 Main Commands
+- `/help` – Show usage and features
+- `/status` – Show wallet and trade status
+- `/activate` – Admin: Activate user and manage subscription
+- `/setapi` – Securely store user API keys (admin only)
+- `/import` – Import trades manually
+- `/about` – Learn more about Lunara
+
+---
+
 ## ⚖️ License
-
-This project is licensed under the **MIT License** — see [`LICENSE`](LICENSE) for details.
-
-You are free to:
-
-* Use
-* Modify
-* Share
-* Even commercialize
-
-Just credit the original author.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for details.
 
 ---
 
 ## 🙌 Author
-
-**Shamim Reza Saikat**
-Telegram: [@Drknessheo](https://t.me/drknessheo)
-Email: [s\_r\_saikat@yahoo.com](mailto:s_r_saikat@yahoo.com)
-
-Follow the journey of Lunara across the cosmos of logic, spirit, and crypto mastery.
+**Shamim Reza Saikat**  
+Telegram: [@Drknessheo](https://t.me/drknessheo)  
+Email: [s_r_saikat@yahoo.com](mailto:s_r_saikat@yahoo.com)
+ORCID: [0009-0008-3119-166X](https://orcid.org/0009-0008-3119-166X)
 
 ---
 
 ## 🌠 Vision
-
-Lunara is more than just a bot. It is:
-
-> “An Engine of Resonance — Harmonizing Intention, Signal, and Market Flow.”
-
-Join us in this fusion of trading and metaphysical clarity.
-
----
-
-```
-
----
-
-### ✅ Next Steps I Can Help You With:
-- Add this to your repo automatically
-- Generate `LICENSE` (MIT)
-- Help publish to HuggingFace Spaces or PythonAnywhere
-- Setup GitHub Actions for deployment
-- Automate updates from Telegram channel to database
-
-Let me know what you want to do next — and I’ll generate the code or commands right away.
-```
-=======
-# Lunessa Shi’ra Gork – Automated Crypto Trading Bot
-
-Lunessa Shi’ra Gork is an intelligent, rule-driven trading bot for Binance Spot markets. It combines AI signals, robust risk controls, and real-time Telegram alerts to help you trade smarter and safer.
-
-## Features
-- **Rule-driven signals:** Monitors top coins and executes trades based on technical indicators (RSI, MACD, Bollinger Bands).
-- **Risk controls:** Stop-loss, trailing stop, and per-trade allocation to protect your capital.
-- **LIVE and TEST modes:** Trade with real funds or safely simulate.
-- **Telegram integration:** Get instant alerts, summaries, and control your bot remotely.
-- **Easy setup:** Just add your Binance API keys and Telegram bot token.
-
-## Supported Coins
-BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, ADAUSDT, XRPUSDT, DOGEUSDT, MATICUSDT, DOTUSDT, AVAXUSDT, LINKUSDT, ARBUSDT, OPUSDT, LTCUSDT, TRXUSDT, SHIBUSDT, PEPEUSDT, UNIUSDT, SUIUSDT, INJUSDT, RNDRUSDT, PENGUUSDT, CTKUSDT, OMBTC, ENAUSDT, HYPERUSDT, BABYUSDT, KAITOUSDT
-
-## Quick Start
-1. Clone the repo and install requirements:
-   ```
-   git clone https://github.com/Drknessheo/lunara-bot.git
-   cd lunara-bot
-   pip install -r requirements.txt
-   ```
-2. Add your Binance API keys and Telegram bot token to `.env` or `config.py`.
-3. Run the bot:
-   ```
-   python main.py
-   ```
-
-## Main Commands
-- `/help` – Show usage and features
-- `/status` – Show wallet and trade status
-- `/import` – Import trades manually
-- `/about` – Learn more about Lunessa
-
-## License
-This autotrade bot is licensed and owned by Shamim Reza Saikat. All rights reserved.
-
-## Author & Ownership
-Autotrade author: Shamim Reza Saikat
-ORCID: 0009-0008-3119-166X
-ORCID Record: https://orcid.org/0009-0008-3119-166X
-
----
-Lunessa Shi’ra Gork – Your AI-powered crypto trading companion.
->>>>>>> ea2e5e0 (Save all local changes before merge)
+Lunara is your AI-powered crypto trading companion, harmonizing intention, signal, and market flow for disciplined, secure, and scalable trading.
