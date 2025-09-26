@@ -6121,3 +6121,212 @@ Traceback (most recent call last):
   File "G:\Pycharm soft\Lib\asyncio\queues.py", line 186, in get
     await getter
 asyncio.exceptions.CancelledError
+2025-09-24 13:41:33,533 - src.core.redis_client - CRITICAL - An unexpected error occurred while initializing Redis: Error 11001 connecting to rediss:6379. getaddrinfo failed.
+Traceback (most recent call last):
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "G:\Pycharm soft\Lib\site-packages\redis\retry.py", line 87, in call_with_retry
+    return do()
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 1102, in _connect
+    sock = super()._connect()
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 761, in _connect
+    for res in socket.getaddrinfo(
+               ~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, self.socket_type, socket.SOCK_STREAM
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "G:\Pycharm soft\Lib\socket.py", line 975, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\back\lunara-bot\src\core\redis_client.py", line 25, in <module>
+    redis_client.ping()
+    ~~~~~~~~~~~~~~~~~^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\commands\core.py", line 1219, in ping
+    return self.execute_command("PING", **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\client.py", line 622, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\client.py", line 628, in _execute_command
+    conn = self.connection or pool.get_connection()
+                              ~~~~~~~~~~~~~~~~~~~^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\utils.py", line 188, in wrapper
+    return func(*args, **kwargs)
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 1522, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "G:\Pycharm soft\Lib\site-packages\redis\connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to rediss:6379. getaddrinfo failed.
+2025-09-24 13:41:33,969 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 13:41:33,969 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 13:41:34,325 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 13:41:34,328 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 13:41:34,352 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 13:41:34,355 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 13:41:34,382 - __main__ - INFO - Database initialization complete.
+2025-09-24 13:41:34,385 - src.core.redis_client - ERROR - [REDIS_LOCK] Failed to acquire master lock: Redis client is not available.
+2025-09-24 13:41:34,387 - __main__ - WARNING - Another bot instance is active. This instance will stand down.
+2025-09-24 13:46:05,178 - src.core.redis_client - INFO - Successfully connected to Redis server.
+2025-09-24 13:46:05,207 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 13:46:05,211 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 13:46:05,264 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 13:46:05,276 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 13:46:05,287 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 13:46:05,298 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 13:46:05,312 - __main__ - INFO - Database initialization complete.
+2025-09-24 13:46:05,365 - src.core.redis_client - INFO - Instance legion_instance_1758699963.6448617 attempting to acquire master lock...
+2025-09-24 13:46:05,745 - src.core.redis_client - INFO - Instance legion_instance_1758699963.6448617 has acquired the master lock. We are the Prime Legion.
+2025-09-24 14:05:46,476 - src.core.redis_client - INFO - Successfully connected to Redis server.
+2025-09-24 14:05:46,607 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 14:05:46,608 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 14:05:46,773 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 14:05:46,775 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 14:05:46,777 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 14:05:46,779 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 14:05:46,819 - __main__ - INFO - Database initialization complete.
+2025-09-24 14:05:46,819 - src.core.redis_client - INFO - Instance legion_instance_1758701145.2022016 attempting to acquire master lock...
+2025-09-24 14:05:47,131 - src.core.redis_client - INFO - Instance legion_instance_1758701145.2022016 has acquired the master lock. We are the Prime Legion.
+2025-09-24 14:10:42,265 - src.core.redis_client - INFO - Successfully connected to Redis server.
+2025-09-24 14:10:42,333 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 14:10:42,333 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 14:10:42,378 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 14:10:42,379 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 14:10:42,382 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 14:10:42,383 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 14:10:42,386 - __main__ - INFO - Database initialization complete.
+2025-09-24 14:10:42,386 - src.core.redis_client - INFO - Instance legion_instance_1758701440.9064898 attempting to acquire master lock...
+2025-09-24 14:10:42,696 - src.core.redis_client - INFO - Instance legion_instance_1758701440.9064898 has acquired the master lock. We are the Prime Legion.
+2025-09-24 14:19:01,520 - src.core.redis_client - INFO - Successfully connected to Redis server.
+2025-09-24 14:20:49,184 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 14:20:49,185 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 14:20:49,308 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 14:20:49,332 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 14:20:49,334 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 14:20:49,335 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 14:20:49,362 - __main__ - INFO - Database initialization complete.
+2025-09-24 14:20:49,363 - src.core.redis_client - INFO - Instance legion_instance_1758701940.5630603 attempting to acquire master lock...
+2025-09-24 14:20:49,688 - src.core.redis_client - INFO - Instance legion_instance_1758701940.5630603 has acquired the master lock. We are the Prime Legion.
+2025-09-24 14:20:51,496 - __main__ - INFO - Initializing and starting the TradeExecutor as a background task...
+2025-09-24 14:20:51,496 - __main__ - INFO - TradeExecutor is now running in the background.
+2025-09-24 14:20:51,498 - __main__ - INFO - Starting bot polling... The empire is listening.
+2025-09-24 14:20:51,498 - src.trade_executor - INFO - [EXECUTOR] Starting TradeExecutor run loop (interval: 20s)...
+2025-09-24 14:20:51,500 - src.trade_executor - INFO - [EXECUTOR_INIT] Performing initial state synchronization from DB to Redis...
+2025-09-24 14:20:51,558 - src.trade_executor - INFO - [EXECUTOR_INIT] Initial state sync complete.
+2025-09-24 14:20:53,726 - telegram.ext.Application - INFO - Application started
+2025-09-24 14:20:56,093 - src.handlers - INFO - User 6284071528 (Shamim Reza) started the bot.
+2025-09-24 14:20:56,294 - src.db - INFO - First-time setup for Admin user 6284071528. Adding default watchlist.
+2025-09-24 14:22:00,531 - src.db - INFO - [DB_WRITE] Attempting to update setting 'trading_mode' for user 6284071528 with value 'LIVE'.
+2025-09-24 14:22:01,677 - src.db - INFO - [DB_WRITE] SUCCESS: Setting 'trading_mode' for user 6284071528 was updated.
+2025-09-24 14:22:01,678 - src.handlers - INFO - User 6284071528 toggled setting 'trading_mode' to 'LIVE'.
+2025-09-24 14:22:24,983 - src.handlers - ERROR - Exception while handling an update: Can't parse entities: character '>' is reserved and must be escaped with the preceding '\'
+Traceback (most recent call last):
+  File "G:\Pycharm soft\Lib\site-packages\telegram\ext\_application.py", line 1315, in process_update
+    await coroutine
+  File "G:\Pycharm soft\Lib\site-packages\telegram\ext\_handlers\basehandler.py", line 159, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\back\lunara-bot\src\handlers.py", line 154, in help_command
+    await update.message.reply_text(help_text, parse_mode=ParseMode.MARKDOWN_V2)
+  File "G:\Pycharm soft\Lib\site-packages\telegram\_message.py", line 2060, in reply_text
+    return await self.get_bot().send_message(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\ext\_extbot.py", line 3107, in send_message
+    return await super().send_message(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\_bot.py", line 1118, in send_message
+    return await self._send_message(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\ext\_extbot.py", line 634, in _send_message
+    result = await super()._send_message(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\_bot.py", line 819, in _send_message
+    result = await self._post(
+             ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "G:\Pycharm soft\Lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.BadRequest: Can't parse entities: character '>' is reserved and must be escaped with the preceding '\'
+2025-09-24 14:23:14,736 - __main__ - INFO - Beginning graceful shutdown...
+2025-09-24 14:23:15,842 - src.core.redis_client - INFO - Master lock released by legion_instance_1758701940.5630603.
+2025-09-24 14:23:16,460 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-09-24 14:23:16,473 - telegram.ext.Application - INFO - Application.stop() complete
+2025-09-24 14:23:16,473 - __main__ - INFO - TradeExecutor task successfully cancelled.
+2025-09-24 14:23:16,474 - __main__ - INFO - Empire has been laid to rest. Goodbye.
+2025-09-24 15:00:49,963 - src.core.redis_client - CRITICAL - An unexpected error occurred while initializing Redis: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)
+Traceback (most recent call last):
+  File "G:\back\lunara-bot\src\core\redis_client.py", line 24, in <module>
+    redis_client = redis.from_url(config.REDIS_URL, decode_responses=True)
+  File "G:\back\lunara-bot\venv\Lib\site-packages\redis\utils.py", line 51, in from_url
+    return Redis.from_url(url, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "G:\back\lunara-bot\venv\Lib\site-packages\redis\client.py", line 170, in from_url
+    connection_pool = ConnectionPool.from_url(url, **kwargs)
+  File "G:\back\lunara-bot\venv\Lib\site-packages\redis\connection.py", line 1371, in from_url
+    url_options = parse_url(url)
+  File "G:\back\lunara-bot\venv\Lib\site-packages\redis\connection.py", line 1261, in parse_url
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)
+2025-09-24 15:00:50,068 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-24 15:00:50,068 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-24 15:00:50,146 - src.db - INFO - Checking for necessary database migrations...
+2025-09-24 15:00:50,148 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-24 15:00:50,151 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-24 15:00:50,152 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-24 15:00:50,169 - __main__ - INFO - Database initialization complete.
+2025-09-24 15:00:50,170 - src.core.redis_client - ERROR - [REDIS_LOCK] Failed to acquire master lock: Redis client is not available.
+2025-09-24 15:00:50,171 - __main__ - WARNING - Another bot instance is active. This instance will stand down.

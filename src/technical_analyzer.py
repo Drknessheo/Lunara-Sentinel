@@ -1,7 +1,7 @@
 
 import logging
 import pandas as pd
-import pandas_ta as ta
+import pandas_ta_openbb as ta
 
 logger = logging.getLogger(__name__)
 
