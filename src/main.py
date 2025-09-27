@@ -1,44 +1,156 @@
+import logging
 import asyncio
 import logging
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters
-from src.handlers import start_command, help_command, unknown_command, button_callback, message_handler
-from src.core.redis_client import acquire_master_lock
-from src.db import init_db
-from src.config import TELEGRAM_BOT_TOKEN as BOT_TOKEN
+import os
+import sys
 
-# Setup logging
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+
+# --- Setup logging and path ---
+if __package__:
+    from . import logging_config
+else:
+    import logging_config
+
+logging_config.setup_logging()
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
+from telegram.error import Conflict
+
+# --- Import Core Components ---
+from src import config
+from src import db
+from src import handlers
+from src.trade_executor import TradeExecutor
+from src.redis_persistence import RedisPersistence
+from src.core import redis_client # Import the redis_client
+from src.core.redis_client import LOCK_EXPIRY_SECONDS
+
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-async def main():
-    logger.info("[CONFIG] Loading environment from .env")
-    logger.info("🚀 Forging the legacy daemon...")
+async def renew_lock_task():
+    """Periodically renews the Redis master lock."""
+    while True:
+        try:
+            await asyncio.sleep(LOCK_EXPIRY_SECONDS / 2)
+            redis_client.renew_master_lock()
+        except asyncio.CancelledError:
+            logger.info("Lock renewal task cancelled.")
+            break
+        except Exception as e:
+            logger.error(f"Error renewing Redis lock: {e}", exc_info=True)
 
-    # Initialize database
-    await init_db()
+async def main() -> None:
+    """The asynchronous main function to rule them all."""
+    logger.info("🚀 Forging the new asynchronous empire...")
+    logger.info(f"TRADE_SIZE (Paper): {config.PAPER_TRADE_SIZE_USDT}")
+    logger.info(f"STOP_LOSS_PERCENT (Near): {config.NEAR_STOP_LOSS_THRESHOLD_PERCENT}")
+    logger.info(f"SLIP_ENCRYPTION_KEY: {'*' * len(config.SLIP_ENCRYPTION_KEY) if config.SLIP_ENCRYPTION_KEY else 'Not set'}")
 
-    # Acquire Redis lock
-    if not acquire_master_lock():
+    # --- Assertions for core configuration ---
+    assert config.TELEGRAM_BOT_TOKEN, "CRITICAL: TELEGRAM_BOT_TOKEN is not set!"
+    assert config.REDIS_URL, "CRITICAL: REDIS_URL is not set!"
+    assert config.ADMIN_USER_ID, "CRITICAL: ADMIN_USER_ID is not set!"
+
+    # --- Asynchronous Initialization ---
+    logger.info("Initializing the asynchronous database...")
+    await db.init_db()
+    logger.info("Database initialization complete.")
+
+    # --- DIGITAL CEASEFIRE: Acquire lock or stand down ---
+    lock_acquired = redis_client.acquire_master_lock()
+    if not lock_acquired:
         logger.warning("Another bot instance is active. This instance will stand down.")
-        return
+        # Optional: could sleep and retry, but for Render's restarts, exiting is cleaner.
+        return # Exit gracefully
 
-    # Initialize bot
-    application = ApplicationBuilder().token(BOT_TOKEN).build()
+    # Start the lock renewal task
+    lock_renewal_task = asyncio.create_task(renew_lock_task())
 
-    # Register handlers
-    application.add_handler(CommandHandler("start", start_command))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CallbackQueryHandler(button_callback))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
-    application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+    # --- Build Application ---
+    persistence = RedisPersistence(redis_url=config.REDIS_URL)
+    
+    application = (
+        Application.builder()
+        .token(config.TELEGRAM_BOT_TOKEN)
+        .persistence(persistence)
+        .build()
+    )
 
-    # Start polling
-    logger.info("🌀 Bot is now polling. The daemon is awake.")
-    await application.run_polling()
-    logger.info("🛑 Bot has shut down gracefully.")
+    # --- Register the Corrected and Completed Asynchronous Handlers ---
+    application.add_handler(CommandHandler("start", handlers.start_command))
+    application.add_handler(CommandHandler("help", handlers.help_command))
+    application.add_handler(CommandHandler("status", handlers.status_command))
+    application.add_handler(CommandHandler("myprofile", handlers.myprofile_command))
+    application.add_handler(CommandHandler("settings", handlers.settings_command))
+    application.add_handler(CommandHandler("pay", handlers.pay_command))
+    application.add_handler(CommandHandler("shutdown", handlers.shutdown_command))
+    
+    application.add_handler(CallbackQueryHandler(handlers.settings_callback_handler))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.message_handler))
+    application.add_error_handler(handlers.error_handler)
 
+    # --- Start Background Tasks --- 
+    logger.info("Initializing and starting the TradeExecutor as a background task...")
+    executor = TradeExecutor(application.bot)
+    executor_task = asyncio.create_task(executor.run())
+    application.bot_data['executor_task'] = executor_task
+    logger.info("TradeExecutor is now running in the background.")
+
+    # --- Run the Bot ---
+    shutdown_event = asyncio.Event()
+    application.bot_data['shutdown_event'] = shutdown_event
+
+    try:
+        logger.info("Initializing application...")
+        await application.initialize()
+        logger.info("Starting application...")
+        await application.start()
+        logger.info("Starting bot polling... The empire is listening.")
+        await application.updater.start_polling()
+
+        # Wait until the shutdown event is set
+        await shutdown_event.wait()
+
+    except Conflict as e:
+        logger.critical(f"TELEGRAM CONFLICT: Another bot instance is already running. This instance will shut down. Details: {e}")
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Shutdown signal received.")
+        shutdown_event.set()
+    except Exception as e:
+        logger.critical(f"An unexpected error occurred in main: {e}", exc_info=True)
+        shutdown_event.set()
+    finally:
+        logger.info("Beginning graceful shutdown...")
+        if application.updater and application.updater.running:
+            logger.info("Stopping updater...")
+            await application.updater.stop()
+            logger.info("Updater stopped.")
+        if application.running:
+            logger.info("Stopping application...")
+            await application.stop()
+            logger.info("Application stopped.")
+        if not executor_task.done():
+            executor_task.cancel()
+            try:
+                await executor_task
+            except asyncio.CancelledError:
+                logger.info("TradeExecutor task successfully cancelled.")
+        
+        if 'lock_renewal_task' in locals() and lock_renewal_task:
+            lock_renewal_task.cancel()
+            try:
+                await lock_renewal_task
+            except asyncio.CancelledError:
+                pass # Expected
+
+        redis_client.release_master_lock() # Release the lock after stopping everything else
+        logger.info("Empire has been laid to rest. Goodbye.")
+ 
 if __name__ == "__main__":
     asyncio.run(main())
