@@ -30449,3 +30449,4 @@ telegram.error.NetworkError: httpx.ConnectError: [Errno -2] Name or service not 
 2025-09-30 04:49:56,897 - src.trade_executor - INFO - [YEAT] Decision for AVAXUSDT: HOLD
 2025-09-30 04:49:56,898 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
 2025-09-30 04:50:06,908 - src.trade_executor - INFO - [YEAT] Processing batch: ['BNBUSDT', 'BTCUSDT', 'DOGEUSDT', 'DOTUSDT', 'ENAUSDT']
+2025-09-30 04:53:23,435 - src.trade_executor - INFO - [YEAT] Decision for BNBUSDT: HOLD
