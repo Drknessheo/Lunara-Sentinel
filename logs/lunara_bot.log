@@ -30329,3 +30329,123 @@ telegram.error.NetworkError: httpx.ConnectError: [Errno -2] Name or service not 
 2025-09-30 02:18:06,711 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
 2025-09-30 02:18:16,713 - src.trade_executor - INFO - [YEAT] Processing batch: ['ETHUSDT', 'FILUSDT', 'ICPUSDT', 'INJUSDT', 'LINKUSDT']
 2025-09-30 02:21:39,801 - src.trade_executor - INFO - [YEAT] Decision for ETHUSDT: HOLD
+2025-09-30 02:38:39,959 - src.core.redis_client - INFO - Successfully connected to Redis server.
+2025-09-30 02:38:40,015 - __main__ - INFO - 🚀 Forging the new asynchronous empire...
+2025-09-30 02:38:40,016 - __main__ - INFO - TRADE_SIZE (Paper): 1000.0
+2025-09-30 02:38:40,018 - __main__ - INFO - STOP_LOSS_PERCENT (Near): 2.0
+2025-09-30 02:38:40,019 - __main__ - INFO - SLIP_ENCRYPTION_KEY: ********************************************
+2025-09-30 02:38:40,021 - __main__ - INFO - Initializing the asynchronous database...
+2025-09-30 02:38:40,066 - src.db - INFO - Checking for necessary database migrations...
+2025-09-30 02:38:40,071 - src.db - INFO - 'symbol' column in 'trades' already exists. No migration needed.
+2025-09-30 02:38:40,076 - src.db - INFO - 'watchlist' column in 'users' already exists. No migration needed.
+2025-09-30 02:38:40,080 - src.db - INFO - 'stop_loss' column in 'trades' already exists. No migration needed.
+2025-09-30 02:38:40,083 - __main__ - INFO - Database initialization complete.
+2025-09-30 02:38:40,084 - src.core.redis_client - INFO - Instance legion_instance_1759199919.9414487 attempting to acquire master lock...
+2025-09-30 02:38:40,086 - src.core.redis_client - INFO - Instance legion_instance_1759199919.9414487 has acquired the master lock. We are the Prime Legion.
+2025-09-30 02:38:40,127 - __main__ - INFO - Initializing and starting the TradeExecutor as a background task...
+2025-09-30 02:38:40,128 - __main__ - INFO - TradeExecutor is now running in the background.
+2025-09-30 02:38:40,129 - __main__ - INFO - Initializing application...
+2025-09-30 02:38:40,131 - src.trade_executor - INFO - [EXECUTOR] Starting TradeExecutor run loop (interval: 20s)...
+2025-09-30 02:38:40,132 - src.trade_executor - INFO - [EXECUTOR_INIT] Performing initial state synchronization from DB to Redis...
+2025-09-30 02:38:40,178 - src.trade_executor - INFO - [EXECUTOR_INIT] Initial state sync complete.
+2025-09-30 02:38:40,829 - src.core.binance_client - INFO - Binance client initialized successfully.
+2025-09-30 02:38:40,860 - __main__ - INFO - Starting application...
+2025-09-30 02:38:40,862 - telegram.ext.Application - INFO - Application started
+2025-09-30 02:38:40,863 - src.strategy_engine - INFO - STRATEGY_ENABLED=True, TRADING_MODE=LIVE
+2025-09-30 02:38:40,864 - src.strategy_engine - INFO - SLIP_ENCRYPTION_KEY: ****
+2025-09-30 02:38:40,957 - src.strategy_engine - INFO - Registered strategy scheduler jobs: ['strategy_job@None']
+2025-09-30 02:38:40,960 - src.strategy_engine - INFO - Starting strategy engine...
+2025-09-30 02:38:40,962 - __main__ - INFO - Starting bot polling... The empire is listening.
+2025-09-30 02:38:40,965 - src.strategy_engine - INFO - Strategy monitor started (interval=600s)
+2025-09-30 02:38:40,981 - src.strategy_engine - INFO - Strategy tick: evaluating autotrade for 1 user(s).
+2025-09-30 02:38:41,284 - src.trade_executor - INFO - [YEAT] Evaluating 26 symbols for user 6284071528 in batches of 5.
+2025-09-30 02:38:41,285 - src.trade_executor - INFO - [YEAT] Processing batch: ['ADAUSDT', 'ALGOUSDT', 'ARBUSDT', 'ATOMUSDT', 'AVAXUSDT']
+2025-09-30 02:38:41,873 - src.handlers - INFO - Start command triggered
+2025-09-30 02:38:41,874 - src.handlers - INFO - User 6284071528 (Shamim Reza) started the bot.
+2025-09-30 02:39:20,692 - src.handlers - INFO - Help command triggered
+2025-09-30 02:39:20,693 - src.handlers - INFO - Sending help reply...
+2025-09-30 02:41:48,665 - src.trade_executor - INFO - [YEAT] Decision for ADAUSDT: HOLD
+2025-09-30 02:44:52,137 - src.trade_executor - INFO - [YEAT] Decision for ALGOUSDT: HOLD
+2025-09-30 02:46:22,016 - src.trade_executor - INFO - [YEAT] Decision for ARBUSDT: HOLD
+2025-09-30 02:48:55,612 - src.trade_executor - INFO - [YEAT] Decision for ATOMUSDT: HOLD
+2025-09-30 02:51:02,004 - src.trade_executor - INFO - [YEAT] Decision for AVAXUSDT: HOLD
+2025-09-30 02:51:02,005 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 02:51:12,010 - src.trade_executor - INFO - [YEAT] Processing batch: ['BNBUSDT', 'BTCUSDT', 'DOGEUSDT', 'DOTUSDT', 'ENAUSDT']
+2025-09-30 02:54:34,348 - src.trade_executor - INFO - [YEAT] Decision for BNBUSDT: HOLD
+2025-09-30 02:57:58,275 - src.trade_executor - INFO - [YEAT] Decision for BTCUSDT: HOLD
+2025-09-30 03:00:25,673 - src.trade_executor - INFO - [YEAT] Decision for DOGEUSDT: HOLD
+2025-09-30 03:02:21,373 - src.trade_executor - INFO - [YEAT] Decision for DOTUSDT: HOLD
+2025-09-30 03:02:54,761 - src.trade_executor - INFO - [YEAT] Decision for ENAUSDT: HOLD
+2025-09-30 03:02:54,762 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 03:03:04,767 - src.trade_executor - INFO - [YEAT] Processing batch: ['ETHUSDT', 'FILUSDT', 'ICPUSDT', 'INJUSDT', 'LINKUSDT']
+2025-09-30 03:06:23,768 - src.trade_executor - INFO - [YEAT] Decision for ETHUSDT: HOLD
+2025-09-30 03:08:20,272 - src.trade_executor - INFO - [YEAT] Decision for FILUSDT: HOLD
+2025-09-30 03:10:05,284 - src.trade_executor - INFO - [YEAT] Decision for ICPUSDT: HOLD
+2025-09-30 03:12:03,202 - src.trade_executor - INFO - [YEAT] Decision for INJUSDT: HOLD
+2025-09-30 03:14:58,845 - src.trade_executor - INFO - [YEAT] Decision for LINKUSDT: HOLD
+2025-09-30 03:14:58,847 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 03:15:08,855 - src.trade_executor - INFO - [YEAT] Processing batch: ['LTCUSDT', 'LUNAUSDT', 'MANAUSDT', 'PEPEUSDT', 'SHIBUSDT']
+2025-09-30 03:18:16,350 - src.trade_executor - INFO - [YEAT] Decision for LTCUSDT: HOLD
+2025-09-30 03:20:28,546 - src.trade_executor - INFO - [YEAT] Decision for LUNAUSDT: HOLD
+2025-09-30 03:22:37,126 - src.trade_executor - INFO - [YEAT] Decision for MANAUSDT: HOLD
+2025-09-30 03:23:38,160 - src.trade_executor - INFO - [YEAT] Decision for PEPEUSDT: HOLD
+2025-09-30 03:25:22,141 - src.trade_executor - INFO - [YEAT] Decision for SHIBUSDT: HOLD
+2025-09-30 03:25:22,142 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 03:25:32,146 - src.trade_executor - INFO - [YEAT] Processing batch: ['SOLUSDT', 'SUIUSDT', 'UNIUSDT', 'VETUSDT', 'XLMUSDT']
+2025-09-30 03:27:31,663 - src.trade_executor - INFO - [YEAT] Decision for SOLUSDT: HOLD
+2025-09-30 03:28:26,108 - src.trade_executor - INFO - [YEAT] Decision for SUIUSDT: HOLD
+2025-09-30 03:30:22,625 - src.trade_executor - INFO - [YEAT] Decision for UNIUSDT: HOLD
+2025-09-30 03:33:10,312 - src.trade_executor - INFO - [YEAT] Decision for VETUSDT: HOLD
+2025-09-30 03:36:12,568 - src.trade_executor - INFO - [YEAT] Decision for XLMUSDT: HOLD
+2025-09-30 03:36:12,571 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 03:36:22,588 - src.trade_executor - INFO - [YEAT] Processing batch: ['XRPUSDT']
+2025-09-30 03:37:33,315 - src.handlers - INFO - Status command triggered
+2025-09-30 03:37:34,991 - src.handlers - INFO - Wallet data injected into profile for user 6284071528
+2025-09-30 03:39:13,506 - src.trade_executor - INFO - [YEAT] Decision for XRPUSDT: HOLD
+2025-09-30 03:39:34,355 - src.trade_executor - INFO - [YEAT] Evaluating 26 symbols for user 6284071528 in batches of 5.
+2025-09-30 03:39:34,369 - src.trade_executor - INFO - [YEAT] Processing batch: ['ADAUSDT', 'ALGOUSDT', 'ARBUSDT', 'ATOMUSDT', 'AVAXUSDT']
+2025-09-30 03:42:29,980 - src.trade_executor - INFO - [YEAT] Decision for ADAUSDT: HOLD
+2025-09-30 03:44:52,057 - src.trade_executor - INFO - [YEAT] Decision for ALGOUSDT: HOLD
+2025-09-30 03:45:51,113 - src.trade_executor - INFO - [YEAT] Decision for ARBUSDT: HOLD
+2025-09-30 03:48:26,832 - src.trade_executor - INFO - [YEAT] Decision for ATOMUSDT: HOLD
+2025-09-30 03:50:29,248 - src.trade_executor - INFO - [YEAT] Decision for AVAXUSDT: HOLD
+2025-09-30 03:50:29,250 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 03:50:39,257 - src.trade_executor - INFO - [YEAT] Processing batch: ['BNBUSDT', 'BTCUSDT', 'DOGEUSDT', 'DOTUSDT', 'ENAUSDT']
+2025-09-30 03:53:50,713 - src.trade_executor - INFO - [YEAT] Decision for BNBUSDT: HOLD
+2025-09-30 03:57:15,922 - src.trade_executor - INFO - [YEAT] Decision for BTCUSDT: HOLD
+2025-09-30 03:59:47,046 - src.trade_executor - INFO - [YEAT] Decision for DOGEUSDT: HOLD
+2025-09-30 04:01:49,353 - src.trade_executor - INFO - [YEAT] Decision for DOTUSDT: HOLD
+2025-09-30 04:02:30,719 - src.trade_executor - INFO - [YEAT] Decision for ENAUSDT: HOLD
+2025-09-30 04:02:30,721 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 04:02:40,734 - src.trade_executor - INFO - [YEAT] Processing batch: ['ETHUSDT', 'FILUSDT', 'ICPUSDT', 'INJUSDT', 'LINKUSDT']
+2025-09-30 04:05:56,440 - src.trade_executor - INFO - [YEAT] Decision for ETHUSDT: HOLD
+2025-09-30 04:07:58,291 - src.trade_executor - INFO - [YEAT] Decision for FILUSDT: HOLD
+2025-09-30 04:09:37,028 - src.trade_executor - INFO - [YEAT] Decision for ICPUSDT: HOLD
+2025-09-30 04:11:31,670 - src.trade_executor - INFO - [YEAT] Decision for INJUSDT: HOLD
+2025-09-30 04:14:34,481 - src.trade_executor - INFO - [YEAT] Decision for LINKUSDT: HOLD
+2025-09-30 04:14:34,482 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 04:14:44,489 - src.trade_executor - INFO - [YEAT] Processing batch: ['LTCUSDT', 'LUNAUSDT', 'MANAUSDT', 'PEPEUSDT', 'SHIBUSDT']
+2025-09-30 04:18:01,554 - src.trade_executor - INFO - [YEAT] Decision for LTCUSDT: HOLD
+2025-09-30 04:19:57,833 - src.trade_executor - INFO - [YEAT] Decision for LUNAUSDT: HOLD
+2025-09-30 04:21:54,158 - src.trade_executor - INFO - [YEAT] Decision for MANAUSDT: HOLD
+2025-09-30 04:22:50,651 - src.trade_executor - INFO - [YEAT] Decision for PEPEUSDT: HOLD
+2025-09-30 04:24:45,112 - src.trade_executor - INFO - [YEAT] Decision for SHIBUSDT: HOLD
+2025-09-30 04:24:45,113 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 04:24:55,123 - src.trade_executor - INFO - [YEAT] Processing batch: ['SOLUSDT', 'SUIUSDT', 'UNIUSDT', 'VETUSDT', 'XLMUSDT']
+2025-09-30 04:26:55,009 - src.trade_executor - INFO - [YEAT] Decision for SOLUSDT: HOLD
+2025-09-30 04:27:57,597 - src.trade_executor - INFO - [YEAT] Decision for SUIUSDT: HOLD
+2025-09-30 04:29:57,977 - src.trade_executor - INFO - [YEAT] Decision for UNIUSDT: HOLD
+2025-09-30 04:32:50,515 - src.trade_executor - INFO - [YEAT] Decision for VETUSDT: HOLD
+2025-09-30 04:35:56,970 - src.trade_executor - INFO - [YEAT] Decision for XLMUSDT: HOLD
+2025-09-30 04:35:56,971 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 04:36:06,980 - src.trade_executor - INFO - [YEAT] Processing batch: ['XRPUSDT']
+2025-09-30 04:39:02,021 - src.trade_executor - INFO - [YEAT] Decision for XRPUSDT: HOLD
+2025-09-30 04:39:22,354 - src.trade_executor - INFO - [YEAT] Evaluating 26 symbols for user 6284071528 in batches of 5.
+2025-09-30 04:39:22,355 - src.trade_executor - INFO - [YEAT] Processing batch: ['ADAUSDT', 'ALGOUSDT', 'ARBUSDT', 'ATOMUSDT', 'AVAXUSDT']
+2025-09-30 04:42:11,659 - src.trade_executor - INFO - [YEAT] Decision for ADAUSDT: HOLD
+2025-09-30 04:44:34,396 - src.trade_executor - INFO - [YEAT] Decision for ALGOUSDT: HOLD
+2025-09-30 04:45:30,949 - src.trade_executor - INFO - [YEAT] Decision for ARBUSDT: HOLD
+2025-09-30 04:48:01,013 - src.trade_executor - INFO - [YEAT] Decision for ATOMUSDT: HOLD
+2025-09-30 04:49:56,897 - src.trade_executor - INFO - [YEAT] Decision for AVAXUSDT: HOLD
+2025-09-30 04:49:56,898 - src.trade_executor - INFO - [YEAT] Pausing for 10 seconds between batches...
+2025-09-30 04:50:06,908 - src.trade_executor - INFO - [YEAT] Processing batch: ['BNBUSDT', 'BTCUSDT', 'DOGEUSDT', 'DOTUSDT', 'ENAUSDT']
