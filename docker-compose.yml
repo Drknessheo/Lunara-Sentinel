@@ -18,11 +18,23 @@ services:
       SLIP_ENCRYPTION_KEY: "${SLIP_ENCRYPTION_KEY}"
       ENABLE_AUTOTRADE: "${ENABLE_AUTOTRADE:-false}"
       WEBHOOK_HMAC_SECRET: "${WEBHOOK_HMAC_SECRET}"
+    env_file:
+      - .env
     volumes:
-      - ./:/app:cached
+      - ./:/app
     ports:
-      - "8080:8080"
+      - "5000:8080"
     command: ["python", "-m", "src.main"]
+
+ #   watchdog:
+#     build: .
+#     command: ["python", "scripts/strategy_watchdog.py"]
+#     env_file:
+#       - .env
+#     depends_on:
+#       - app
+#
+# Then save and rebuild:
 
 volumes:
   redis-data:

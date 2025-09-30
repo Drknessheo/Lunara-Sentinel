@@ -4,13 +4,24 @@ import itertools
 from dotenv import load_dotenv
 
 # 1. --- Environment Loading ---
-dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+project_dotenv = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+app_dotenv = os.path.join(os.path.dirname(os.path.dirname(__file__)), "app", ".env")
 
-if os.path.exists(dotenv_path):
-    print(f"[CONFIG] Loading environment from: {dotenv_path}")
-    load_dotenv(dotenv_path=dotenv_path)
+loaded_any = False
+if os.path.exists(project_dotenv):
+    print(f"[CONFIG] Loading environment from: {project_dotenv}")
+    load_dotenv(dotenv_path=project_dotenv)
+    loaded_any = True
 else:
-    print(f"[CONFIG] Warning: .env file not found at {dotenv_path}. Relying on system environment variables.")
+    print(f"[CONFIG] Warning: .env file not found at {project_dotenv}.")
+
+if os.path.exists(app_dotenv):
+    print(f"[CONFIG] Loading environment from: {app_dotenv}")
+    load_dotenv(dotenv_path=app_dotenv)
+    loaded_any = True
+
+if not loaded_any:
+    print("[CONFIG] No .env files loaded; relying on system environment variables.")
 
 # 2. --- Core Credentials & Keys ---
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("BOT_TOKEN")
@@ -104,6 +115,10 @@ WATCHLIST_TIMEOUT_HOURS = 24
 # --- Paper Trading ---
 PAPER_TRADE_SIZE_USDT = 1000.0
 PAPER_STARTING_BALANCE = 10000.0
+
+# --- Strategy Engine ---
+STRATEGY_ENABLED = os.getenv("STRATEGY_ENABLED", "true").lower() in ["true", "1", "t"]
+TRADING_MODE = os.getenv("TRADING_MODE", "PAPER").upper()
 
 # 5. --- Subscription Tier Configuration ---
 SUBSCRIPTION_TIERS = {}

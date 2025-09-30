@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm
+FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -8,7 +8,7 @@ WORKDIR /app
 # Install supervisor and scientific computing libraries from Debian repositories
 # This is faster and more reliable than building them with pip.
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends supervisor python3-numpy python3-pandas && \
+	apt-get install -y --no-install-recommends supervisor build-essential libssl-dev libffi-dev pkg-config libpng-dev libjpeg-dev libfreetype6-dev && \
 	rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files
@@ -22,7 +22,7 @@ RUN pip install --upgrade pip setuptools wheel
 RUN pip install -r requirements.txt
 
 # Create a non-root user
-RUN groupadd -r appgroup && useradd -r -g appgroup -d /app -s /sbin/nologin -c "Application User" appuser
+RUN groupadd -r appgroup || true && useradd -r -g appgroup -d /app -s /usr/sbin/nologin -c "Application User" appuser || true
 
 # Copy the rest of the application code
 COPY . .

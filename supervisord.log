@@ -1,0 +1,122 @@
+2025-09-26 20:02:42,571 INFO supervisord started with pid 1
+2025-09-26 20:02:43,576 INFO spawned: 'keepalive' with pid 7
+2025-09-26 20:02:43,634 INFO spawned: 'bot' with pid 8
+2025-09-26 20:02:44,852 INFO success: keepalive entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:02:44,853 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:02:56,653 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:02:57,687 INFO spawned: 'bot' with pid 14
+2025-09-26 20:02:58,690 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:03:06,007 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:03:07,010 INFO spawned: 'bot' with pid 20
+2025-09-26 20:03:08,024 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:03:12,482 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:03:13,487 INFO spawned: 'bot' with pid 26
+2025-09-26 20:03:14,490 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:03:17,955 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:03:18,959 INFO spawned: 'bot' with pid 32
+2025-09-26 20:03:19,962 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:03:22,938 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:03:23,942 INFO spawned: 'bot' with pid 38
+2025-09-26 20:03:24,945 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:03:27,902 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:03:28,906 INFO spawned: 'bot' with pid 44
+2025-09-26 20:03:28,908 WARN received SIGINT indicating exit request
+2025-09-26 20:03:28,912 INFO waiting for keepalive, bot to die
+2025-09-26 20:03:29,914 WARN received SIGINT indicating exit request
+2025-09-26 20:03:30,209 WARN received SIGINT indicating exit request
+2025-09-26 20:03:31,211 WARN received SIGINT indicating exit request
+2025-09-26 20:03:32,213 WARN received SIGINT indicating exit request
+2025-09-26 20:03:32,213 INFO waiting for keepalive, bot to die
+2025-09-26 20:03:33,029 INFO stopped: bot (exit status 0)
+2025-09-26 20:03:33,035 WARN stopped: keepalive (terminated by SIGTERM)
+2025-09-26 20:07:59,753 INFO supervisord started with pid 1
+2025-09-26 20:08:00,881 INFO spawned: 'keepalive' with pid 7
+2025-09-26 20:08:01,148 INFO spawned: 'bot' with pid 8
+2025-09-26 20:08:02,153 INFO success: keepalive entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:08:02,153 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:08:50,305 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:08:51,333 INFO spawned: 'bot' with pid 14
+2025-09-26 20:08:52,336 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:08:57,283 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:08:58,287 INFO spawned: 'bot' with pid 20
+2025-09-26 20:08:59,290 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:02,451 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:03,456 INFO spawned: 'bot' with pid 26
+2025-09-26 20:09:04,461 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:07,788 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:08,792 INFO spawned: 'bot' with pid 32
+2025-09-26 20:09:09,804 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:13,231 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:14,235 INFO spawned: 'bot' with pid 38
+2025-09-26 20:09:15,238 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:19,024 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:20,028 INFO spawned: 'bot' with pid 44
+2025-09-26 20:09:21,058 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:24,316 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:25,320 INFO spawned: 'bot' with pid 50
+2025-09-26 20:09:26,326 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:29,293 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:30,297 INFO spawned: 'bot' with pid 56
+2025-09-26 20:09:31,299 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:35,470 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:36,475 INFO spawned: 'bot' with pid 62
+2025-09-26 20:09:37,478 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:41,052 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:42,057 INFO spawned: 'bot' with pid 68
+2025-09-26 20:09:43,059 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:47,062 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:48,066 INFO spawned: 'bot' with pid 74
+2025-09-26 20:09:49,068 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:52,457 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:53,461 INFO spawned: 'bot' with pid 80
+2025-09-26 20:09:54,464 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:09:57,679 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:09:58,683 INFO spawned: 'bot' with pid 86
+2025-09-26 20:09:59,690 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:10:03,204 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:10:04,208 INFO spawned: 'bot' with pid 92
+2025-09-26 20:10:05,211 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:10:09,576 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:10:10,578 INFO spawned: 'bot' with pid 98
+2025-09-26 20:10:11,580 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:10:15,544 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:10:16,548 INFO spawned: 'bot' with pid 104
+2025-09-26 20:10:17,550 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:10:20,514 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:10:21,519 INFO spawned: 'bot' with pid 110
+2025-09-26 20:10:22,522 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:10:27,414 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:10:28,419 INFO spawned: 'bot' with pid 116
+2025-09-26 20:10:28,420 WARN received SIGINT indicating exit request
+2025-09-26 20:10:28,423 INFO waiting for keepalive, bot to die
+2025-09-26 20:10:29,702 WARN received SIGINT indicating exit request
+2025-09-26 20:10:31,705 WARN received SIGINT indicating exit request
+2025-09-26 20:10:31,706 INFO waiting for keepalive, bot to die
+2025-09-26 20:10:32,330 INFO stopped: bot (exit status 0)
+2025-09-26 20:10:32,336 WARN stopped: keepalive (terminated by SIGTERM)
+2025-09-26 20:13:00,135 INFO supervisord started with pid 1
+2025-09-26 20:13:01,139 INFO spawned: 'keepalive' with pid 7
+2025-09-26 20:13:01,145 INFO spawned: 'bot' with pid 8
+2025-09-26 20:13:02,149 INFO success: keepalive entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:13:02,149 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:13:07,395 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:13:08,399 INFO spawned: 'bot' with pid 14
+2025-09-26 20:13:08,401 WARN received SIGINT indicating exit request
+2025-09-26 20:13:08,406 INFO waiting for keepalive, bot to die
+2025-09-26 20:13:08,408 WARN stopped: bot (terminated by SIGTERM)
+2025-09-26 20:13:08,413 WARN stopped: keepalive (terminated by SIGTERM)
+2025-09-26 20:16:55,074 INFO supervisord started with pid 1
+2025-09-26 20:16:56,079 INFO spawned: 'keepalive' with pid 7
+2025-09-26 20:16:56,084 INFO spawned: 'bot' with pid 8
+2025-09-26 20:16:57,088 INFO success: keepalive entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:16:57,088 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:17:01,436 WARN exited: bot (exit status 1; not expected)
+2025-09-26 20:17:02,440 INFO spawned: 'bot' with pid 14
+2025-09-26 20:17:03,443 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:17:07,028 INFO exited: bot (exit status 0; expected)
+2025-09-26 20:17:08,033 INFO spawned: 'bot' with pid 20
+2025-09-26 20:17:09,036 INFO success: bot entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-26 20:17:09,037 WARN received SIGINT indicating exit request
+2025-09-26 20:17:09,040 INFO waiting for keepalive, bot to die
+2025-09-26 20:17:09,063 WARN stopped: bot (terminated by SIGTERM)
+2025-09-26 20:17:09,070 WARN stopped: keepalive (terminated by SIGTERM)

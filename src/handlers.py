@@ -1,7 +1,7 @@
 import logging
 import re
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, ConversationHandler
 from telegram.constants import ParseMode
 from telegram.error import BadRequest, Conflict
 from telegram.helpers import escape_markdown
@@ -10,8 +10,14 @@ import os
 
 from . import db
 from . import config
+from . import strategy_engine
+from .core import binance_client
+from .core import binance_client
 
 logger = logging.getLogger(__name__)
+
+# === Onboarding Conversation States ===
+ONBOARDING_TRADING_MODE, ONBOARDING_WATCHLIST = range(2)
 
 # === Utility Functions ===
 
@@ -24,7 +30,7 @@ async def get_user_id(update: Update) -> int | None:
 def build_settings_keyboard(settings: dict) -> InlineKeyboardMarkup:
     keyboard = []
     setting_order = [
-        'autotrade', 'trading_mode', 'rsi_buy', 'rsi_sell', 'stop_loss',
+        'autotrade', 'trading_mode', 'trade_size', 'rsi_buy', 'rsi_sell', 'stop_loss',
         'trailing_activation', 'trailing_drop', 'profit_target', 'paper_balance', 'watchlist'
     ]
 
@@ -51,23 +57,83 @@ def build_settings_keyboard(settings: dict) -> InlineKeyboardMarkup:
 
 # === Core Command Handlers ===
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     logger.info("Start command triggered")
     user_id = await get_user_id(update)
-    if not user_id: return
+    if not user_id: return ConversationHandler.END
 
     logger.info(f"User {user_id} ({update.effective_user.full_name}) started the bot.")
     _, created = await db.get_or_create_user(user_id)
 
-    welcome_message = (
-        "⚔️ Welcome to the Empire, Commander. Your command center is ready."
-        if created else
-        "⚔️ Welcome back, Commander. Your legions await your command."
-    )
-    await update.message.reply_text(
-        escape_markdown(f"{welcome_message}\n\nUse /help to see available commands.", version=2),
+    if created:
+        await update.message.reply_text(
+            escape_markdown("⚔️ Welcome to the Empire, Commander. To begin, you must choose your path.\n\n" \
+                            "Will you command a live legion with real assets, or drill your strategies in the paper arena?", version=2),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("💵 Live Trading", callback_data="onboarding_live"),
+                 InlineKeyboardButton("📄 Paper Trading", callback_data="onboarding_paper")]]),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+        return ONBOARDING_TRADING_MODE
+    else:
+        welcome_message = "⚔️ Welcome back, Commander. Your legions await your command."
+        await update.message.reply_text(
+            escape_markdown(f"{welcome_message}\n\nUse /help to see available commands.", version=2),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+        return ConversationHandler.END
+
+async def onboarding_trading_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Handles the user's choice of trading mode during onboarding."""
+    query = update.callback_query
+    await query.answer()
+    user_id = await get_user_id(update)
+    if not user_id: return ConversationHandler.END
+
+    mode = "LIVE" if query.data == "onboarding_live" else "PAPER"
+    await db.update_user_setting(user_id, "trading_mode", mode)
+
+    await query.edit_message_text(
+        escape_markdown(f"You have chosen the path of *{mode}* trading.\n\n" \
+                        "Now, name the assets you wish to watch. Provide a comma-separated list of symbols (e.g., BTCUSDT, ETHUSDT).", version=2),
         parse_mode=ParseMode.MARKDOWN_V2
     )
+    # Ensure the strategy engine is running after onboarding (harmless if already running)
+    try:
+        strategy_engine.start_strategy()
+        logger.info("Strategy engine start requested after onboarding.")
+    except Exception:
+        logger.exception("Failed to start strategy engine after onboarding_trading_mode")
+    return ONBOARDING_WATCHLIST
+
+async def onboarding_watchlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Handles the user's initial watchlist during onboarding."""
+    user_id = await get_user_id(update)
+    if not user_id: return ConversationHandler.END
+
+    raw_text = update.message.text
+    # Sanitize the watchlist input
+    symbols = re.findall(r'[A-Z]{3,10}USDT', raw_text.upper())
+    clean_watchlist = ",".join(sorted(list(set(symbols))))
+
+    if clean_watchlist:
+        await db.update_user_setting(user_id, "watchlist", clean_watchlist)
+        await update.message.reply_text(
+            escape_markdown(f"✅ Watchlist updated with {len(symbols)} symbols.\n\nYour command center is now operational. Use /status to see your current configuration.", version=2),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+    else:
+        await update.message.reply_text(
+            escape_markdown("⚠️ No valid symbols (e.g., BTCUSDT) were found in your message. Your watchlist has not been updated. Please try again.", version=2),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+
+    return ConversationHandler.END
+
+async def onboarding_cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Cancels the onboarding process."""
+    await update.message.reply_text("Onboarding cancelled. You can restart by sending /start again.")
+    return ConversationHandler.END
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Displays a list of available commands."""
@@ -117,8 +183,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         status_text += f"💰 *Imperial Treasury (Paper):* `{formatted_balance}`\n\n"
 
     # --- Strategic Settings Section ---
-    status_text += "*Strategic Settings:*
-"
+    status_text += "*Strategic Settings:*\n\n"
     settings_for_display = settings.copy()
     settings_for_display.pop('paper_balance', None)
     settings_for_display.pop('watchlist', None)
@@ -140,6 +205,27 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     status_text += "\n_Use /settings to modify all parameters._"
 
+    # --- Wallet Visibility (LIVE mode only) ---
+    try:
+        if settings.get('trading_mode') == 'LIVE':
+            # Fetch user's spot balances (returns [] on timeout/failure)
+            balances = await binance_client.get_all_spot_balances(user_id)
+            if not balances:
+                status_text += "\n\n*Imperial Wallet:* Wallet temporarily unavailable."
+                logger.warning(f"Wallet data unavailable for user {user_id} when rendering status/myprofile.")
+            else:
+                # Summarize non-zero balances
+                status_text += "\n\n*Imperial Wallet (non-zero balances):*\n"
+                for bal in balances:
+                    asset = bal.get('asset')
+                    free = float(bal.get('free', 0))
+                    locked = float(bal.get('locked', 0))
+                    total = free + locked
+                    status_text += f"- `{asset}`: {total}\n"
+                logger.info(f"Wallet data injected into profile for user {user_id}")
+    except Exception:
+        logger.exception(f"Unexpected error while attaching wallet data for user {user_id}")
+
     await update.message.reply_text(
         escape_markdown(status_text, version=2),
         parse_mode=ParseMode.MARKDOWN_V2
@@ -149,12 +235,43 @@ async def myprofile_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     logger.info("Myprofile command triggered")
     await status_command(update, context)
 
+
+async def scheduler_status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Admin command to report strategy scheduler state and registered jobs."""
+    user_id = await get_user_id(update)
+    if not user_id: return
+
+    # Simple permission: only allow admin to query scheduler status
+    if user_id != getattr(config, 'ADMIN_USER_ID', None):
+        await update.message.reply_text("You are not authorized to view scheduler status.")
+        return
+
+    try:
+        sched = strategy_engine._scheduler
+        if not sched:
+            await update.message.reply_text("Scheduler is not initialized.")
+            return
+
+        running = getattr(sched, 'running', False)
+        jobs = sched.get_jobs() if hasattr(sched, 'get_jobs') else []
+        msg = f"Scheduler running: {running}\nRegistered jobs: {len(jobs)}\n"
+        for j in jobs:
+            jid = getattr(j, 'id', str(j))
+            next_run = getattr(j, 'next_run_time', None)
+            msg += f"- {jid}: next_run={next_run}\n"
+
+        await update.message.reply_text(msg)
+    except Exception:
+        logger.exception("Failed to get scheduler status")
+        await update.message.reply_text("Error retrieving scheduler status; check server logs.")
+
 async def settings_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.info("Settings command triggered")
     user_id = await get_user_id(update)
     if not user_id: return
 
     settings = await db.get_user_effective_settings(user_id)
+    settings["trade_size"] = os.getenv("TRADE_SIZE", "15")
     keyboard = build_settings_keyboard(settings)
     await update.message.reply_text("Choose a setting to adjust, or select a toggle:", reply_markup=keyboard)
 
@@ -210,14 +327,37 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     setting_key = context.user_data.pop('awaiting_setting')
-    new_value = update.message.text
+    new_value_raw = update.message.text
+    new_value = new_value_raw
 
     try:
+        # --- INPUT SANITIZATION ---
+        if setting_key == 'watchlist':
+            logger.info(f"Sanitizing watchlist input for user {user_id}.")
+            # Use regex to find all valid-looking symbols (e.g., BTCUSDT)
+            symbols = re.findall(r'[A-Z]{3,10}USDT', new_value_raw.upper())
+            # Create a clean, sorted, comma-separated string with no duplicates
+            clean_watchlist = ",".join(sorted(list(set(symbols))))
+            
+            if not clean_watchlist:
+                await update.message.reply_text(
+                    escape_markdown("⚠️ No valid symbols (e.g., BTCUSDT) were found. Watchlist not updated.", version=2),
+                    parse_mode=ParseMode.MARKDOWN_V2
+                )
+                return
+            new_value = clean_watchlist
+        # --- END SANITIZATION ---
+
         await db.update_user_setting(user_id, setting_key, new_value)
         setting_name = setting_key.replace('_', ' ').title()
         logger.info(f"User {user_id} set '{setting_key}' to '{new_value}'.")
+        
+        response_message = f"✅ *{setting_name}* has been updated."
+        if setting_key == 'watchlist':
+            response_message = f"✅ Watchlist updated with {len(new_value.split(','))} symbols."
+
         await update.message.reply_text(
-            escape_markdown(f"✅ *{setting_name}* has been updated.", version=2),
+            escape_markdown(response_message, version=2),
             parse_mode=ParseMode.MARKDOWN_V2
         )
 
@@ -232,6 +372,37 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             escape_markdown("An error occurred. The Imperial Guard has been notified.", version=2),
             parse_mode=ParseMode.MARKDOWN_V2
         )
+
+
+async def addcoin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Adds a coin to the user's watchlist."""
+    user_id = await get_user_id(update)
+    if not user_id:
+        return
+
+    if not context.args:
+        await update.message.reply_text("Please provide a symbol to add. Usage: /addcoin <SYMBOL>")
+        return
+
+    symbol = context.args[0].upper()
+    
+    try:
+        settings = await db.get_user_effective_settings(user_id)
+        watchlist = settings.get('watchlist', '').split(',')
+        watchlist = [s.strip() for s in watchlist if s.strip()]
+
+        if symbol not in watchlist:
+            watchlist.append(symbol)
+            new_watchlist = ",".join(watchlist)
+            await db.update_user_setting(user_id, "watchlist", new_watchlist)
+            await update.message.reply_text(f"✅ {symbol} has been added to your watchlist.")
+        else:
+            await update.message.reply_text(f"⚠️ {symbol} is already in your watchlist.")
+
+    except Exception as e:
+        logger.error(f"Failed to add coin for user {user_id}: {e}")
+        await update.message.reply_text("An error occurred while updating your watchlist.")
+
 
 PAYMENT_MESSAGE = '''
 <b>💳 Subscription & Payment Information</b>

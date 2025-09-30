@@ -3,6 +3,7 @@ import asyncio
 import logging
 import os
 import sys
+import subprocess
 
 
 # --- Setup logging and path ---
@@ -17,17 +18,18 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ConversationHandler
 from telegram.error import Conflict
 
 # --- Import Core Components ---
 from src import config
 from src import db
-from src import handlers
+from src import commands, callbacks, messages, handlers
 from src.trade_executor import TradeExecutor
 from src.redis_persistence import RedisPersistence
 from src.core import redis_client # Import the redis_client
 from src.core.redis_client import LOCK_EXPIRY_SECONDS
+from src import strategy_engine
 
 
 logging.basicConfig(level=logging.INFO)
@@ -83,10 +85,24 @@ async def main() -> None:
     )
 
     # --- Register the Corrected and Completed Asynchronous Handlers ---
-    application.add_handler(CommandHandler("start", handlers.start_command))
+    onboarding_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', handlers.start_command)],
+        states={
+            handlers.ONBOARDING_TRADING_MODE: [
+                CallbackQueryHandler(handlers.onboarding_trading_mode, pattern='^onboarding_')
+            ],
+            handlers.ONBOARDING_WATCHLIST: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.onboarding_watchlist)
+            ],
+        },
+        fallbacks=[CommandHandler('cancel', handlers.onboarding_cancel)],
+    )
+    application.add_handler(onboarding_conv_handler)
+
     application.add_handler(CommandHandler("help", handlers.help_command))
     application.add_handler(CommandHandler("status", handlers.status_command))
     application.add_handler(CommandHandler("myprofile", handlers.myprofile_command))
+    application.add_handler(CommandHandler("scheduler_status", handlers.scheduler_status_command))
     application.add_handler(CommandHandler("settings", handlers.settings_command))
     application.add_handler(CommandHandler("pay", handlers.pay_command))
     application.add_handler(CommandHandler("shutdown", handlers.shutdown_command))
@@ -111,6 +127,32 @@ async def main() -> None:
         await application.initialize()
         logger.info("Starting application...")
         await application.start()
+        # Start the strategy engine scheduler after the asyncio loop and application are running
+        try:
+            # Record the main loop and start the strategy scheduler if enabled
+            if getattr(config, 'STRATEGY_ENABLED', True):
+                strategy_engine.start_strategy(loop=asyncio.get_running_loop())
+            else:
+                logger.info("STRATEGY_ENABLED is false; strategy scheduler will not start.")
+
+            # Start a lightweight monitor to ensure the scheduler stays alive
+            monitor_task = asyncio.create_task(strategy_engine.start_strategy_monitor(interval_seconds=getattr(config, 'AI_TRADE_INTERVAL_MINUTES', 1) * 60))
+            application.bot_data['strategy_monitor_task'] = monitor_task
+
+            # Optionally spawn the watchdog inside the app container as a child process
+            spawn_watchdog = os.getenv('STRATEGY_WATCHDOG_IN_APP', 'false').lower() in ['1', 'true', 't', 'yes']
+            watchdog_proc = None
+            if spawn_watchdog:
+                try:
+                    watchdog_cmd = [sys.executable, os.path.join(os.path.dirname(__file__), '..', 'scripts', 'strategy_watchdog.py')]
+                    logger.info(f"Spawning in-app watchdog: {watchdog_cmd}")
+                    watchdog_proc = subprocess.Popen(watchdog_cmd)
+                    application.bot_data['watchdog_proc'] = watchdog_proc
+                except Exception:
+                    logger.exception("Failed to spawn in-app watchdog")
+
+        except Exception:
+            logger.exception("Failed to start strategy engine from main startup")
         logger.info("Starting bot polling... The empire is listening.")
         await application.updater.start_polling()
 

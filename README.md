@@ -124,3 +124,12 @@ redis-cli HGETALL promotion_webhook_stats
 ```
 
 Or use `/retry_stats` to view in bot output.
+
+---
+
+## Binance timeout & retry behavior
+
+Short summary: network calls to Binance are configured with a 10s timeout and
+use a 3-attempt exponential backoff for read timeouts and connection errors.
+On repeated failures the code returns empty results and logs a clear message to
+help tracing (see `docs/binance-timeout.md` for full details).

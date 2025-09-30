@@ -308,4 +308,73 @@ async def autotrade_buy_from_suggestions(
     max_create: int = 1,
 ) -> None:
     """Buys assets for a user based on AI suggestions, with reserve detection."""
-    # ... (rest of the function remains the same)
+    if not suggestions:
+        return
+
+    settings = autotrade_settings.get_user_settings(user_id)
+    if not settings or settings.get("autotrade") != "on":
+        return
+
+    usdt_amount = settings.get("trade_amount_usd", 15) # Default to 15 USDT
+    max_trades = settings.get("max_concurrent_trades", 5)
+    open_trades = new_db.get_open_trades_by_user(user_id)
+
+    if len(open_trades) >= max_trades:
+        logger.info(f"User {user_id} has reached the max trade limit of {max_trades}. No new trades will be opened.")
+        return
+
+    # --- The Imperial Treasury's Strategy ---
+    # Filter out symbols the user is already trading
+    open_symbols = {trade['symbol'] for trade in open_trades}
+    
+    created_count = 0
+    for suggestion in suggestions:
+        if created_count >= max_create:
+            break # Stop after creating the max number of new trades
+
+        symbol = suggestion.get("symbol")
+        if not symbol:
+            continue
+
+        if symbol in open_symbols:
+            logger.info(f"Skipping buy for {symbol} as an open trade already exists for user {user_id}.")
+            continue
+
+        logger.info(f"Processing buy suggestion for {symbol} for user {user_id}.")
+
+        if dry_run:
+            logger.info(f"[DRY RUN] Would attempt to buy {usdt_amount} USDT of {symbol} for user {user_id}.")
+            # In dry run, we can simulate success to test follow-on logic
+            created_count += 1
+            continue
+
+        try:
+            # --- Execute The Emperor's Will ---
+            buy_result = await trading_logic.place_buy_order_logic(user_id, symbol, usdt_amount)
+            
+            if buy_result and buy_result.get('success'):
+                entry_price = buy_result.get('price')
+                quantity = buy_result.get('quantity')
+                
+                # Create a new trade record
+                new_db.create_trade(
+                    user_id=user_id,
+                    symbol=symbol,
+                    buy_price=entry_price,
+                    quantity=quantity,
+                    status='OPEN',
+                    pnl_percent=0.0,
+                    closed_by=None
+                )
+                created_count += 1
+                
+                msg = f"🤖 Autotrade executed: Bought {quantity:.6f} {symbol} @ ${entry_price:.4f}"
+                logger.info(msg)
+                if context and getattr(context, "bot", None):
+                    await context.bot.send_message(chat_id=user_id, text=msg)
+            # No need for an else, as place_buy_order_logic raises TradeError on failure
+
+        except trading_logic.TradeError as e:
+            logger.error(f"Autotrade buy failed for {symbol} for user {user_id}: {e}")
+        except Exception as e:
+            logger.error(f"A critical error occurred during autotrade buy for {symbol}: {e}\n{traceback.format_exc()}")
